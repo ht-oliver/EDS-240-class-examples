@@ -4,22 +4,62 @@ format: html
 ---
 
 ```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+```
 
+
+```{r}
+# Read in data
+bees <- read_csv(here::here("week1", "lab1", "data", "stressor.csv")) %>% 
+  clean_names()
 
 ```
 
 
 
 ```{r}
+# Remove special characters
+bees$state <- str_replace_all(string = bees$state, "[^a-zA-Z]", "")
+bees$stressor <- str_replace_all(string = bees$stressor, "[^a-zA-Z]", "")
+```
 
 
+```{r}
+# Pivoting
+long_bees <- bees %>% 
+  pivot_longer(cols = c(january_march, april_june, july_september, october_december),
+               names_to = 'month',
+               values_to = 'stress_quant')
+
+# Fix 'Diseases' in stressor string
+long_bees$stressor <-
+  str_replace_all(long_bees$stressor,
+                  "Disesases",
+                  "Diseases")
+```
+
+
+```{r}
+# Change month to quarter, remove old month column, filter for state
+long_bees <- long_bees %>% 
+  mutate(quarter = case_when(month == 'january_march'~1, # add quarter column
+                             month == 'april_june'~2,
+                             month == 'july_september'~3,
+                             month == 'october_december'~4)) %>% 
+  select(!month) %>% # remove month column
+  filter(!(state == 'UnitedStates' | state == 'OtherStates'))
 
 ```
 
 
 ```{r}
-
-
+NorthDakota <- long_bees %>% 
+  filter(state == "NorthDakota", stressor == "Diseases") 
 
 ```
+
+
+
 
