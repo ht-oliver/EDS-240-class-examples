@@ -1,0 +1,24 @@
+---
+title: "Lecture 2.1: Choosing the Right Graphic Form"
+format: html
+---
+
+```{r}
+library("naniar") # tools for exploring missing data
+library("ggridges") # {ggplot2} extension for creating ridgeline plots
+library("gghighlight") # {ggplot2} extension for highlighting geoms
+library("ggbeeswarm") # {ggplot2} extension for creating categorical scatter (violin point) plots
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
