@@ -1,0 +1,76 @@
+### Choosing the right type of visualization
+
+## Distributions
+  - Histograms
+  - Density Charts
+
+## Ranking
+  - Bar plots
+  - Lollipop
+  - Dumbbell
+
+## Evolutions
+  - Line graphs
+  - Area graph
+
+## Numeric Relationships
+ - Scatter plot
+ - 2d density
+
+
+1) THink about the message you want to convey
+
+2) Consider the types of variables you're working with - and data types
+
+3) Try multiple forms
+
+4) Arrange the components of the graphic
+
+5) Test the outcomes of your graphic on others
+
+
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+```{r}
+
+url <- ("https://raw.githubusercontent.com/owid/energy-data/refs/heads/master/owid-energy-data.csv")
+raw_data <- read_csv(url)
+
+
+useful <- c("country", "coal_share_elec", "biofuel_share_elec", "gas_share_elec", "nuclear_share_elec", "oil_share_elec", "other_renewables_share_elec", "hydro_share_elec", "solar_share_elec", "wind_share_elec", "year" )
+
+
+filtered_data <- raw_data %>% 
+  select(useful) %>% 
+  filter(country %in% c("India", "China", "United States", "Indonesia", "Pakistan", "Nigeria", "Brazil", "Bangladesh", "Russia", "Mexico"), year == 2024)
+
+```
+
+
+```{r}
+
+
+
+
+plot_data <- filtered_data %>%
+  select(-year) %>% 
+pivot_longer(cols = -country, 
+             names_to = "energy_type", 
+             values_to = "value")
+
+ggplot(plot_data, aes(x = country, y = value, fill = energy_type)) +
+  geom_col(position = "fill") +
+  coord_flip() +
+  theme_minimal() +
+  labs(y = "Proportion") +
+  scale_fill_brewer(palette = "Set3")
+  
+
+```
+
+
